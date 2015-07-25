@@ -37,6 +37,7 @@ home:
       - submit: Log in
     - box50:
       - subheading: Create an account
+      - alert: Don't mess this part up|danger
       - text_field: Email address
       - text_field: Email address again
       - password_field: Password
@@ -45,7 +46,7 @@ home:
       - checkbox: Send me marketing
       - submit: Register
   - line: thin
-  - paragraph: Footer links go here. ";
+  - paragraph: Footer links go here.";
 		});        
     }
 }
