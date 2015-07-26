@@ -34,12 +34,10 @@
 		function attachElementsToPage(parent, data) {
 
 			console.log("Attach! %O %O", parent, data);
-			//console.log("Length: " + data.length);
 
 			for (var i = 0; i < data.length; i++) {
 				
 				var element = data[i];
-				//console.log("element is: %O", element);
 				
 				// Now 'element' is an object which may contain a type/content pair
 				// or a type/array pair. Let's find out...
@@ -53,8 +51,8 @@
 					if (value instanceof Array || value instanceof Object) {
 
 						if (isNode(key)) {
+
 							// It's an array of elemets, so render the elements:
-							//console.log("Creating a node for " + key);
 							var $element = getHTMLElementForDescriptor(key, components[1]).appendTo(parent);
 							attachElementsToPage($element, value);
 
@@ -291,7 +289,6 @@
 		}
 
 	</script>
-
 	
 </body>
 </html>
