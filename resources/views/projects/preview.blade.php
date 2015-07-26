@@ -14,18 +14,9 @@
 
 	<script>
 
-		var yml, json;
-
 		$.get('/yaml/{{ $project->id }}', function(data) {
-			
-			yml = YAML.parse(data);
-			json = JSON.stringify(yml);
-		
-			console.log(data);
-			console.log(yml);
-
+			var yml = YAML.parse(data);
 			start(yml);
-
 		});
 
 		function start(json) {
