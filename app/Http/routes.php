@@ -27,6 +27,10 @@ Route::get('yaml/{id}', [
     'as' => 'yaml', 'uses' => 'ProjectsController@yaml'
 ]);
 
+Route::get('view/{hash}', [
+    'as' => 'view', 'uses' => 'PagesController@view'
+]);
+
 Route::resource('projects', 'ProjectsController');
 
 Route::controllers([

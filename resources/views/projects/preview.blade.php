@@ -33,8 +33,6 @@
 		// Run through the data and attach the children
 		function attachElementsToPage(parent, data) {
 
-			console.log("Attach! %O %O", parent, data);
-
 			for (var i = 0; i < data.length; i++) {
 				
 				var element = data[i];
