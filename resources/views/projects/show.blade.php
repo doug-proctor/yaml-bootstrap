@@ -6,7 +6,7 @@
 		<h1>{{ $project->name }}</h1>
 	</header> --}}
 
-	<div class="preview sidebar-closed">
+	<div class="preview">
 
 		{!! Form::open(array('route' => ['projects.update', $project->id], 'method' => 'PATCH')) !!}
 			{!! Form::textarea('yaml', $project->yaml, array('placeholder' => 'Yaml goes here...', 'class' => 'preview__textarea')) !!}
