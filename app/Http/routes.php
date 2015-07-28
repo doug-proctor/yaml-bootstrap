@@ -15,7 +15,7 @@ Route::get('/', [
 	'as' => 'home', 'uses' => 'PagesController@home'
 ]);
 
-Route::get('/preview/', function () {
+Route::get('preview/', function () {
     return Redirect::route('project.preview');
 });
 
