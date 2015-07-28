@@ -44,14 +44,15 @@
 
 					var value = element[key];
 					var components = getComponentArray(key);
-					key = components[0];
+					key = components.shift();
+					var classes = components.join(' ');
 
 					if (value instanceof Array || value instanceof Object) {
 
 						if (isNode(key)) {
 
 							// It's an array of elemets, so render the elements:
-							var $element = getHTMLElementForDescriptor(key, components[1]).appendTo(parent);
+							var $element = getHTMLElementForDescriptor(key, null, classes).appendTo(parent);
 							attachElementsToPage($element, value);
 
 						} else {
@@ -96,34 +97,35 @@
 							$parent = $parent.children('.inner');
 						}
 						
-						var $element = getHTMLElementForDescriptor(key, value).appendTo($parent);
+						var $element = getHTMLElementForDescriptor(key, value, classes).appendTo($parent);
 					}
 				}
 			}
 		}
 
-		function getHTMLElementForDescriptor(descriptor, content) {
+		function getHTMLElementForDescriptor(descriptor, content, classes, attributes) {
 
 			var elements = {
-				paragraph: 		makeParagraph(content),
+				paragraph: 		makeParagraph(content, classes),
 				link: 			$('<a />').html(content).attr('href', '#'),
-				heading: 		$('<h1 />').html(content),
-				subheading: 	$('<h3 />').html(content),
-				jumbo: 			makeJumbotron(content),
-				password_field: makeFormField('password', content, null, null),
-				text_field: 	makeFormField('text', content, content + '...', null),
-				checkbox: 		makeCheckbox(content),
-				text_area: 		makeTextArea(content),
-				radio_button: 	makeRadioButton(content),
+				title: 			$('<h1 />').html(content).addClass(classes),
+				heading: 		$('<h2 />').html(content).addClass(classes),
+				subheading: 	$('<h3 />').html(content).addClass(classes),
+				jumbo: 			makeJumbotron(content, classes),
+				passwordfield: 	makeFormField('password', content, null),
+				textfield: 		makeFormField('text', content, null),
+				checkbox: 		makeCheckbox(content, classes),
+				radiobutton: 	makeRadioButton(content, classes),
+				textarea: 		makeTextArea(content, classes),
 				submit: 		makeFormSubmit(content),
 				row: 			$('<div />').addClass('row'),
-				box100: 		makeColumnWithClasses('col-md-12'),
-				box75: 			makeColumnWithClasses('col-md-9'),
-				box50: 			makeColumnWithClasses('col-md-6'),
-				box25: 			makeColumnWithClasses('col-md-3'),
-				box33: 			makeColumnWithClasses('col-md-4'),
-				box66: 			makeColumnWithClasses('col-md-8'),
-				box: 			makeBox(content),
+				// box100: 		makeColumnWithClasses('col-md-12'),
+				// box75: 			makeColumnWithClasses('col-md-9'),
+				// box50: 			makeColumnWithClasses('col-md-6'),
+				// box25: 			makeColumnWithClasses('col-md-3'),
+				// box33: 			makeColumnWithClasses('col-md-4'),
+				// box66: 			makeColumnWithClasses('col-md-8'),
+				box: 			makeColumnWithClasses(classes),
 				panel: 			makePanel(content, 'panel-default'),
 				form: 			$('<form />').addClass(''),
 				button: 		makeButton(content),
@@ -139,12 +141,12 @@
 		function isNode(item) {
 			var nodes = [
 				'row',
-				'box100',
-				'box75',
-				'box50',
-				'box25',
-				'box33',
-				'box66',
+				// 'box100',
+				// 'box75',
+				// 'box50',
+				// 'box25',
+				// 'box33',
+				// 'box66',
 				'box',
 				'form',
 			];
@@ -193,14 +195,9 @@
 			return $alert;
 		}
 
-		function makeParagraph(content) {
+		function makeParagraph(content, classes) {
 			var components = getComponentArray(content);
-			$p = $('<p />').html(components[0]);
-
-			// Look for directives in the content string
-			if (components && components.indexOf('centered') !== -1) {
-				$p.addClass('centered');
-			}
+			$p = $('<p />').html(components[0]).addClass(classes);
 			return $p;
 		}
 		
@@ -214,9 +211,9 @@
 			return $('<div />').addClass('form-group');
 		}
 
-		function makeTextArea(content) {
+		function makeTextArea(content, classes) {
 			var $group = makeFormGroup();
-			var $text_area = $('<textarea />').addClass('form-control').appendTo($group);
+			var $text_area = $('<textarea />').addClass('form-control ' + classes).appendTo($group);
 			return $group;
 		}
 
@@ -224,54 +221,52 @@
 			var components = getComponentArray(content);
 			var $wrapper = $('<div />').addClass('button-wrapper');
 			var $button = $('<button />').addClass('btn btn-primary').text(components[0]).appendTo($wrapper);
-
 			if (components && components.indexOf('right')) {
 				$wrapper.addClass('right');
 			}
 			return $wrapper;
 		}
 
-		function makeJumbotron(content) {
+		function makeJumbotron(content, classes) {
 			var $jumbo = $('<div />').addClass('jumbotron');
-			var $heading = $('<h1 />').html(content).appendTo($jumbo);
+			var $heading = $('<h1 />').html(content).addClass(classes).appendTo($jumbo);
 			return $jumbo;
 		}
 
-		function makeCheckbox(content) {
-			
+		function makeCheckbox(content, classes) {			
 			var $group = $('<div />').addClass('checkbox');
 			var $label = $('<label />').text(content).appendTo($group);
 			var $checkbox = $('<input />', {'type':'checkbox'}).prependTo($label);
-
+			if (classes && classes.indexOf('checked') !== -1) {
+				$checkbox.attr('checked', 'true');
+			}
 			return $group;
 		}
 
-		function makeRadioButton(content) {
+		function makeRadioButton(content, classes) {
 			var $group = $('<div />').addClass('radio');
 			var $label = $('<label />').text(content).appendTo($group);
 			var $radio_button = $('<input />', {'type':'radio'}).prependTo($label);
+			if (classes && classes.indexOf('checked') !== -1) {
+				$radio_button.attr('checked', 'true');
+			}
 			return $group;
 		}
 
-		function makeFormField(type, label, placeholder, value) {
-
+		function makeFormField(type, label, value) {
 			var $form = $('<div />').addClass('form-group');
 			var $label = $('<label />').text(label).appendTo($form);
 			var $input = $('<input />').attr({
 				type: type,
-				placeholder: placeholder,
 			}).addClass('form-control').val(value).appendTo($form);
-
 			return $form;
 		}
 
 		function makeFormSubmit(value) {
-
 			var $form = $('<div />').addClass('form-group');
 			var $input = $('<input />').attr({
 				type: 'submit'
 			}).addClass('form-control btn btn-primary').val(value).appendTo($form);
-
 			return $form;
 		}
 

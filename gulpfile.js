@@ -32,7 +32,7 @@ elixir(function(mix) {
     mix
     	.sass('preview.scss', 'public/css/preview.css')
 	    .styles([
-	    	'/bower_components/bootstrap/dist/css/bootstrap.css',
+	    	//'/bower_components/bootstrap/dist/css/bootstrap.css',
 	    	'/public/css/preview.css',
 	    ], 'public/css/preview-bundle.css', './');
 
